@@ -1,0 +1,26 @@
+<div class="well gamecard" [ngStyle]="setBackground()">
+    <div class="team team-guest">
+        <div class="team-wrapper">
+            <span class="team-score">{{standing.guestTeam.score}}</span>
+            <span class="team-name">{{standing.guestTeam.name}}</span>
+            <div class="team-posession">
+                <img src="images/football.svg" [style.visibility]="standing.guestTeam.posession ? 'visible' : 'hidden'">
+            </div>
+        </div>
+    </div>
+    <div class="game-stats">
+        <div class="game-stats-wrapper">
+            <span class="game-quarter">{{getFormattedQuarter()}}</span>
+            <span class="game-gameclock" *ngIf="standing.game.gameClock">{{standing.game.gameClock}}</span>
+        </div>
+    </div>
+    <div class="team team-home">
+        <div class="team-wrapper">
+            <span class="team-score">{{standing.homeTeam.score}}</span>
+            <span class="team-name">{{standing.homeTeam.name}}</span>
+            <div class="team-posession">
+                <img src="images/football.svg" [style.visibility]="standing.homeTeam.posession ? 'visible' : 'hidden'">
+            </div>
+        </div>
+    </div>
+</div>

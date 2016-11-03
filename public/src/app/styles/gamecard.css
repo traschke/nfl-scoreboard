@@ -1,0 +1,53 @@
+.gamecard {
+    height: 200px;
+    padding: 0 175px;
+    display: flex;
+    justify-content: center;
+    color: #FFFFFF;
+    background-position: left -75px center, right -75px center, center center;
+    background-repeat: no-repeat, no-repeat, repeat;
+    background-size: 250px, 250px, auto;
+}
+
+.team {
+    align-self: center;
+    width: 72px;
+}
+
+.team-wrapper {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.team-posession {
+    align-self: center;
+}
+
+.team-posession> img {
+    width: 25px;
+}
+
+.team-score {
+    font-size: 48pt;
+}
+
+.team-name {
+    font-size: 24pt;
+}
+
+.game-stats {
+    width: 68px;
+    font-size: 18pt;
+    align-self: center;
+    margin: 0 15px;
+    text-align: center;
+}
+
+.game-stats-wrapper {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
