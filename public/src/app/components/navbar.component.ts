@@ -6,7 +6,7 @@ import {Component, Input} from "@angular/core";
 @Component({
     selector: 'navbar',
     templateUrl: 'app/templates/navbar.html',
-    styleUrls: ['./app/styles/navbar.min.css']
+    styleUrls: ['./app/styles/navbar.css']
 })
 export class NavbarComponent {
 

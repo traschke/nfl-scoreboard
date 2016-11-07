@@ -16,6 +16,7 @@ var htmlmin = require('gulp-htmlmin');
 var Builder = require('systemjs-builder');
 var appProd = './public/dist/app';
 var sourcemaps = require('gulp-sourcemaps');
+var inject = require('gulp-inject');
 
 var tsConfig = require('./tsconfig.json');
 
@@ -31,30 +32,30 @@ gulp.task('copy:assets', function () {
 });
 
 gulp.task('copy:dependencies:bootstrap', function () {
-    var js = gulp.src('./node_modules/bootstrap/dist/js/*.min.js')
+    var js = gulp.src('./node_modules/bootstrap/dist/js/*')
         .pipe(gulp.dest('./public/dist/lib/bootstrap/js'));
 
     var fonts = gulp.src('./node_modules/bootstrap/dist/fonts/*')
         .pipe(gulp.dest('./public/dist/lib/bootstrap/fonts'));
 
-    var css = gulp.src('./node_modules/bootstrap/dist/css/*.min.css')
+    var css = gulp.src('./node_modules/bootstrap/dist/css/*')
         .pipe(gulp.dest('./public/dist/lib/bootstrap/css'));
 
     return merge(js, fonts, css);
 });
 
 gulp.task('copy:dependencies:jquery', function () {
-    return gulp.src('./node_modules/jquery/dist/jquery.min.js')
+    return gulp.src('./node_modules/jquery/dist/jquery.js')
         .pipe(gulp.dest('./public/dist/lib/jquery'));
 });
 
 gulp.task('copy:dependencies:core-js', function () {
-    return gulp.src('./node_modules/core-js/client/shim.min.js')
+    return gulp.src('./node_modules/core-js/client/shim.js')
         .pipe(gulp.dest('./public/dist/lib/core-js'));
 });
 
 gulp.task('copy:dependencies:zone-js', function () {
-    return gulp.src('./node_modules/zone.js/dist/zone.min.js')
+    return gulp.src('./node_modules/zone.js/dist/zone.js')
         .pipe(gulp.dest('./public/dist/lib/zone-js'));
 });
 
@@ -69,7 +70,7 @@ gulp.task('copy:dependencies:systemjs', function () {
 });
 
 gulp.task('copy:dependencies:angular2', function () {
-    return gulp.src('./node_modules/@angular/**/bundles/*.min.js')
+    return gulp.src('./node_modules/@angular/**/bundles/*.umd.js')
         .pipe(rename({dirname: ''}))
         .pipe(gulp.dest('./public/dist/lib/@angular'))
 });
@@ -127,7 +128,7 @@ gulp.task('minify:html', function () {
         .pipe(gulp.dest('./public/dist'))
 });
 
-gulp.task('minify', ['minify:js', 'minify:css', 'minify:html']);
+gulp.task('minify', ['minify:js', 'minify:css']);
 
 gulp.task('bundle', function () {
     var builder = new Builder('./public/dist', './public/dist/systemjs.config.js');
@@ -142,6 +143,56 @@ gulp.task('bundle', function () {
         });
 });
 
+gulp.task('replace:html:prod', function () {
+    gulp.src('./public/dist/index.html')
+        .pipe(
+            inject(
+                gulp.src([
+                    './public/dist/lib/bootstrap/css/bootstrap.min.css',
+                    './public/dist/lib/jquery/**/*.min.js',
+                    './public/dist/lib/bootstrap/js/bootstrap.min.js',
+                    './public/dist/lib/core-js/**/*.min.js',
+                    './public/dist/lib/zone-js/**/*.min.js',
+                    './public/dist/lib/reflect/**/*.min.js',
+                    './public/dist/lib/systemjs/**/*.min.js',
+                    './public/dist/app/bundle.min.js',
+                ], {read: false}),
+                {
+                    relative: true
+                }
+            )
+        )
+        .pipe(gulp.dest('./public/dist'));
+});
+
+gulp.task('replace:html:dev', function () {
+    gulp.src('./public/dist/index.html')
+        .pipe(
+            inject(
+                gulp.src([
+                    './public/dist/lib/bootstrap/css/bootstrap.css',
+                    './public/dist/lib/jquery/**/*.js',
+                    './public/dist/lib/bootstrap/js/bootstrap.js',
+                    './public/dist/lib/core-js/**/*.js',
+                    './public/dist/lib/zone-js/**/*.js',
+                    './public/dist/lib/reflect/**/*.js',
+                    './public/dist/lib/systemjs/**/*.js',
+                    './public/dist/systemjs.config.js',
+                    './public/dist/start.js',
+                    '!./public/dist/**/*.min.js'
+                ], {read: false}),
+                {
+                    relative: true
+                }
+            )
+        )
+        .pipe(gulp.dest('./public/dist'));
+});
+
+gulp.task('dev', function (callback) {
+   runSequence('clean', 'copy:assets', 'copy:dependencies', 'compile:ts', 'replace:html:dev', callback)
+});
+
 gulp.task('build', function (callback) {
-    runSequence('clean', 'copy:assets', 'copy:dependencies', 'compile:ts', 'bundle', 'minify', callback);
+    runSequence('clean', 'copy:assets', 'copy:dependencies', 'compile:ts', 'bundle', 'minify', 'replace:html:prod', 'minify:html', callback);
 });

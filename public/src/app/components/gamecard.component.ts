@@ -6,7 +6,7 @@ import {Component, Input} from "@angular/core";
 @Component({
     selector: 'gamecard',
     templateUrl: 'app/templates/gamecard.html',
-    styleUrls: ['app/styles/gamecard.min.css']
+    styleUrls: ['app/styles/gamecard.css']
 })
 export class GamecardComponent {
     @Input() standing: {};
