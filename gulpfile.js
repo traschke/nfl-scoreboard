@@ -149,6 +149,7 @@ gulp.task('replace:html:prod', function () {
             inject(
                 gulp.src([
                     './public/dist/lib/bootstrap/css/bootstrap.min.css',
+                    './public/dist/css/**/*.min.css',
                     './public/dist/lib/jquery/**/*.min.js',
                     './public/dist/lib/bootstrap/js/bootstrap.min.js',
                     './public/dist/lib/core-js/**/*.min.js',
@@ -171,6 +172,7 @@ gulp.task('replace:html:dev', function () {
             inject(
                 gulp.src([
                     './public/dist/lib/bootstrap/css/bootstrap.css',
+                    './public/dist/css/**/*.css',
                     './public/dist/lib/jquery/**/*.js',
                     './public/dist/lib/bootstrap/js/bootstrap.js',
                     './public/dist/lib/core-js/**/*.js',
